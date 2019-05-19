@@ -136,7 +136,7 @@ if [ $DOWNLOAD_HALIDE == "YES" ] ; then
       ../
  make
  sudo make install
-
+fi
 cd $OPENCV_SOURCE_DIR
 git clone https://github.com/opencv/opencv.git
 cd opencv
