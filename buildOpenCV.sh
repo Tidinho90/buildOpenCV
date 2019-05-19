@@ -155,7 +155,7 @@ if [ $DOWNLOAD_OPENCV_EXTRAS == "YES" ] ; then
  # This is for the test data
  cd $OPENCV_SOURCE_DIR
  git clone https://github.com/opencv/opencv_contrib.git
- cd opencv_extra
+ cd opencv_contrib
  git checkout -b v${OPENCV_VERSION} ${OPENCV_VERSION}
 fi
 
