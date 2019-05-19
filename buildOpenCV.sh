@@ -113,6 +113,7 @@ sudo apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
 if [ $DOWNLOAD_HALIDE == "YES" ] ; then
  echo "Installing Halide"
  cd $OPENCV_SOURCE_DIR
+ echo `pwd`
  git clone https://github.com/halide/Halide
  cd Halide
  git checkout ae8251a
@@ -153,7 +154,6 @@ if [ $DOWNLOAD_OPENCV_EXTRAS == "YES" ] ; then
  echo "Installing opencv_extras"
  # This is for the test data
  cd $OPENCV_SOURCE_DIR
- echo `pwd`
  git clone https://github.com/opencv/opencv_contrib.git
  cd opencv_extra
  git checkout -b v${OPENCV_VERSION} ${OPENCV_VERSION}
