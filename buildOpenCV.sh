@@ -153,6 +153,7 @@ if [ $DOWNLOAD_OPENCV_EXTRAS == "YES" ] ; then
  echo "Installing opencv_extras"
  # This is for the test data
  cd $OPENCV_SOURCE_DIR
+ echo `pwd`
  git clone https://github.com/opencv/opencv_contrib.git
  cd opencv_extra
  git checkout -b v${OPENCV_VERSION} ${OPENCV_VERSION}
