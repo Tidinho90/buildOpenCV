@@ -111,7 +111,8 @@ sudo apt-get install -y python3-dev python3-numpy python3-py python3-pytest
 sudo apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev 
 
 if [ $DOWNLOAD_HALIDE == "YES" ] ; then
- echo "InstallingHhalide"
+ echo "Installing Halide"
+ cd $OPENCV_SOURCE_DIR
  git clone https://github.com/halide/Halide
  cd Halide
  git checkout ae8251a
@@ -134,7 +135,7 @@ if [ $DOWNLOAD_HALIDE == "YES" ] ; then
       -D WITH_TARGET_PTX=ON \
       -D WITH_TARGET_X86=OFF \
       ../
- make
+ make -j4
  sudo make install
 fi
 cd $OPENCV_SOURCE_DIR
