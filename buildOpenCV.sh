@@ -2,7 +2,7 @@
 # License: MIT. See license file in root directory
 # Copyright(c) JetsonHacks (2017-2019)
 
-OPENCV_VERSION=3.4.1
+OPENCV_VERSION=4.1.0
 # Jetson Nano
 ARCH_BIN=5.3
 INSTALL_DIR=/usr/local
@@ -14,6 +14,8 @@ INSTALL_DIR=/usr/local
 DOWNLOAD_OPENCV_EXTRAS=NO
 # Source code directory
 OPENCV_SOURCE_DIR=$HOME
+# Use Halide backend
+DOWNLOAD_HALIDE=NO
 WHEREAMI=$PWD
 
 CLEANUP=true
@@ -86,6 +88,14 @@ sudo apt-get install -y \
     libx264-dev \
     qt5-default \
     zlib1g-dev \
+    libgdal-dev \
+    libgflags-dev \
+    libceres-dev \
+    libtesseract-dev \
+    ccache \
+    libogre-1.9-dev \
+    libavresample-dev \ 
+    libvtk6-qt-dev \
     pkg-config
 
 # https://devtalk.nvidia.com/default/topic/1007290/jetson-tx2/building-opencv-with-opengl-support-/post/5141945/#5141945
@@ -99,6 +109,33 @@ sudo apt-get install -y python3-dev python3-numpy python3-py python3-pytest
 
 # GStreamer support
 sudo apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev 
+
+if [ $DOWNLOAD_HALIDE == "YES" ] ; then
+ echo "InstallingHhalide"
+ git clone https://github.com/halide/Halide
+ cd Halide
+ git checkout ae8251a
+ mkdir build
+ cd build
+ time cmake -D CMAKE_BUILD_TYPE=RELEASE \
+      -D CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} \
+      -D WITH_TESTS=OFF \
+      -D WITH_TARGET_AARCH64=ON \
+      -D WITH_TARGET_AMDGPU=OFF \
+      -D WITH_TARGET_ARM=OFF \
+      -D WITH_TARGET_D3D12COMPUTE=OFF \
+      -D WITH_TARGET_HEXAGON=OFF \
+      -D WITH_TARGET_METAL=OFF \
+      -D WITH_TARGET_MIPS=OFF \
+      -D WITH_TARGET_OPENCL=ON \
+      -D WITH_TARGET_OPENGL=ON \
+      -D WITH_TARGET_OPENGLCOMPUTE=ON \
+      -D WITH_TARGET_POWERPC=OFF \
+      -D WITH_TARGET_PTX=ON \
+      -D WITH_TARGET_X86=OFF \
+      ../
+ make
+ sudo make install
 
 cd $OPENCV_SOURCE_DIR
 git clone https://github.com/opencv/opencv.git
@@ -142,8 +179,6 @@ time cmake -D CMAKE_BUILD_TYPE=RELEASE \
       -D WITH_CUDA=ON \
       -D CUDA_ARCH_BIN=${ARCH_BIN} \
       -D CUDA_ARCH_PTX="" \
-      -D ENABLE_FAST_MATH=ON \
-      -D CUDA_FAST_MATH=ON \
       -D WITH_CUBLAS=ON \
       -D WITH_LIBV4L=ON \
       -D WITH_GSTREAMER=ON \
@@ -152,6 +187,11 @@ time cmake -D CMAKE_BUILD_TYPE=RELEASE \
       -D WITH_OPENGL=ON \
       -D BUILD_opencv_python2=ON \
       -D BUILD_opencv_python3=ON \
+      -D BUILD_JASPER=ON \
+      -D BUILD_PERF_TESTS=OFF \
+      -D BUILD_TESTS=OFF \
+      -D WITH_HALIDE=ON \
+      -D WITH_GDAL=ON \
       ../
 
 if [ $? -eq 0 ] ; then
