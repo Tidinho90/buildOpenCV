@@ -11,11 +11,11 @@ INSTALL_DIR=/usr/local
 #  OPENCV_TEST_DATA_PATH=../opencv_extra/testdata
 # Make sure that you set this to YES
 # Value should be YES or NO
-DOWNLOAD_OPENCV_EXTRAS=NO
+DOWNLOAD_OPENCV_EXTRAS=YES
 # Source code directory
 OPENCV_SOURCE_DIR=$HOME
 # Use Halide backend
-DOWNLOAD_HALIDE=NO
+DOWNLOAD_HALIDE=YES
 WHEREAMI=$PWD
 
 CLEANUP=true
@@ -152,7 +152,7 @@ if [ $DOWNLOAD_OPENCV_EXTRAS == "YES" ] ; then
  echo "Installing opencv_extras"
  # This is for the test data
  cd $OPENCV_SOURCE_DIR
- git clone https://github.com/opencv/opencv_extra.git
+ git clone https://github.com/opencv/opencv_contrib.git
  cd opencv_extra
  git checkout -b v${OPENCV_VERSION} ${OPENCV_VERSION}
 fi
@@ -192,6 +192,8 @@ time cmake -D CMAKE_BUILD_TYPE=RELEASE \
       -D BUILD_TESTS=OFF \
       -D WITH_HALIDE=ON \
       -D WITH_GDAL=ON \
+      -D ENABLE_NON_FREE=ON \
+      -D EXTRA_MODULES_PATH=../../opencv_contrib/modules \
       ../
 
 if [ $? -eq 0 ] ; then
